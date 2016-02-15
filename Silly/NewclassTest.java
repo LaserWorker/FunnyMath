@@ -74,7 +74,7 @@ public class Up {
 			if (1 < val){
 			return 2 * TwoToPowerOf(val - 1);
 			}else if (1-0 > val){
-			return 2 / TwoToPowerOf(val - 1);
+			return 2 / TwoToPowerOf(val + 1);
 			}else{ 
 			return 2;
 			}
