@@ -1,55 +1,148 @@
 import java.io.*;
 import java.util.*;
 
-public class Up { 
+public class NewclassTest { 
 	
 	//Incase Error cannot be given or known.
 	public static String ProgramError = "Unknown"; 
 
 	public static class branch{
-		public static byte[] Value = new byte[8];
+		byte[] Value = new byte[8];
 		public branch(byte[] val){
-			Value = val;
+			byte li = (byte)val.length;
+			for (int c = 0; li > c; c++)
+				Value[c] = val[c];
 		}
-		public void set(Class<?> arg){
+		public branch(short val){
+			Value = new byte[8];
 		}
-		public void fromString(){
+		public branch(int val){
+			Value = new byte[8];
 		}
-		public void isExp(Class<?> A){
-		}
-		public void isLn(Class<?> Answer){
-		}
-		public void isPow(Class<?> Base, Class<?> Exp){
-		}
-		public void isMul(Class<?> A, Class<?> B){
-		}
-		public void isDev(Class<?> N, Class<?> D){
-		}
-		public void isAdd(Class<?> A, Class<?> B){
-		}
-		public void isSub(Class<?> A, Class<?> B){
-		}
-		public void isLog(Class<?> Base, Class<?> Answer){
-		}
-		public static long GetVal(){
-			long Val = 281474976710656L;
-			if (0 > Value[6]){
-				Val = Value[6] * (0L - Val);
+		public branch(long val){
+		System.out.println(val);
+			long v = val;
+			Value[7] = (byte)(v>>56);
+			if((0 == Value[7]) | (-1 == Value[7])){
+				for (int c = 0; 7 > c; c++){
+					Value[(6-c)] = (byte)(v >> (6 - c << 3));
+				}
+				Value[7] = (byte)0;
 			}else{
-				Val = Value[6] * Val;
+				
 			}
-			Val = Val + ParseVal(Value[5]) * 1099511627776L;
-			Val = Val + ParseVal(Value[4]) * 4294967296L;
-			Val = Val + ParseVal(Value[3]) * 16777216L;
-			Val = Val + ParseVal(Value[2]) * 65536L;
-			Val = Val + ParseVal(Value[1]) * 256L;
-			Val = Val + ParseVal(Value[0]);
-			if (0 > Value[6]){
-				Val = 0 - Val;
+		}
+		public branch(float val){
+			Value = new byte[8];
+		}
+		public branch(double val){
+
+			Value = new byte[8];
+		}
+		public branch(){
+			Value = new byte[8];
+		}
+		public void fromString(String val){
+			Value = new byte[8];
+		}
+		public static branch isSq(Object val){
+			double DVal = 0D;
+			long LVal = 0L;
+			int n=0;
+			switch (val.getClass().getSimpleName()){ 
+			case "Byte":
+				val = val;
+			case "Short":
+				val = (short) val;
+			case "Integer":
+				val = (int) val;
+			case "Float":
+				n = (int) val;
+				DVal = (double) n;
+				LVal = (long) n;
+			break;
+			case "Double":		
+				DVal = (double) val;
+				LVal = (long) val;
+			break;
+			case "String":
+				DVal = Double.parseDouble((String)val);
+				LVal = (long) DVal;
+			break;
+			case "Long":
+				n = (int) val;
+				LVal = (long) n;
+			break;
+			default:
+			break;
 			}
+			if((30370004999L) > LVal & LVal > (0 - 30370004999L)){
+				LVal = LVal * LVal;
+				return new branch(LVal);
+			}else{ //lost precision
+				DVal = DVal * DVal;
+			}
+			
+			return new branch(DVal);
+		}
+		public static branch isSqrt(Object A){
+			return new branch();
+		}
+		public static branch isExp(Object A){
+			return new branch();
+		}
+		public static branch isLn(Object Answer){
+			return new branch();
+		}
+		public static branch isPow(Object Base, Object Exp){
+			return new branch();
+		}
+		public static branch isMul(Object A, Object B){
+			return new branch();
+		}
+		public static branch isDev(Object N, Object D){
+			return new branch();
+		}
+		public static branch isAdd(Object A, Object B){
+			return new branch();
+		}
+		public static branch isSub(Object A, Object B){
+			return new branch();
+		}
+		public static branch isLog(Object Base, Object Answer){
+			return new branch();
+		}
+		public String Display(){
+			String Tens = "";
+			int i[] = GetTenPower();
+			if(0 > i[0]){
+				Tens = "10^-10^";
+				i[0] = 0 - i[0];
+			}
+			for(int c = i[0]; 0 < c; c--)
+				Tens = Tens + "10^";
+
+			Tens = " * " + Tens +i[1];
+			if (0==i[1] & 2 > i[1]) Tens = "  ";
+			return GetVal() + Tens;
+		}
+		public String DisplayRawBytes(){
+			String Vals = Value[7] + " ";
+			for(int c = 6; (0 - 1) < c; c--)
+				Vals = Vals + ",  " + Value[c];
+			return Vals;
+		}
+		public long GetVal(){
+			long  Val = ((long)Value[6])<<48;
+			Val = Val | ((long)(Value[5] & 0xFF))<<40;
+			Val = Val | ((long)(Value[4] & 0xFF))<<32;
+			Val = Val | ((long)(Value[3] & 0xFF))<<24;
+			Val = Val | ((long)(Value[2] & 0xFF))<<16;
+			Val = Val | ((long)(Value[1] & 0xFF))<<8;
+			Val = Val | (long)(Value[0] & 0xFF);
 			return Val;
 		}
-		public static int[] GetTenPower(){
+		public int[] GetTenPower(){
 			return TenPower(Branch(Value[7]));
 		}
 		public static int[] TenPower(int[] raised){
@@ -102,16 +195,7 @@ public class Up {
 			if (0 < branch){
 				to = branch << 2;
 			}
-			System.out.println(to);
 			return new int[]{raised, to};
-		}
-		public static long ParseVal(byte val){
-			int v = val;
-			if (0 > v){
-				v = 0 - v;
-				v = v + 256;
-			}
-			return (long)v;
 		}
 		public static int LogBaseTwo(int round){			
 			if (2 < round){
@@ -122,148 +206,41 @@ public class Up {
 			}
 			return round;
 		}
-/**
-		public static float LogBaseTwo(float round){
-			return 0;
+		public byte[] ShiftArray(byte[] Array, int shift){
+			for (int i = (Array.length-(shift+1)); i > -1; i--) {
+				Array[i] = Array[i+shift];
+			}
+			return Array;
 		}
-**/
 	}
-
-	public static class power {
-		
-		public float power (float pow, float num) {
-                        float onum=num;
-		        if (pow < 0){
-		        	while( -1 > pow ){
-		        		num = num / onum;
-	        			pow = pow + 1;
-		        	}
-		        }else{
-	        		while( 1 < pow ){
-				        num = num * onum;
-			        	pow = pow - 1;
-	        		}
-	        	}
-	        	return ((float)num);
-                }
-                public float powerl (long pow, long num) {
-                        long onum=num;
-		        if (pow < 0){
-		        	while( -1 > pow ){
-		        		num = num / onum;
-	        			pow = pow + 1;
-		        	}
-		        }else{
-	        		while( 1 < pow ){
-				        num = num * onum;
-			        	pow = pow - 1;
-	        		}
-	        	}
-	        	return ((float)num);
-                }
-                public float poweri (long pow, int num) {
-                        int onum=num;
-		        if (pow < 0){
-		        	while( -1 > pow ){
-		        		num = num / onum;
-	        			pow = pow + 1;
-		        	}
-		        }else{
-	        		while( 1 < pow ){
-				        num = num * onum;
-			        	pow = pow - 1;
-	        		}
-	        	}
-	        	return ((float)num);
-                }
-	}
-
-	public static class Pow {
-		float Solution;
-                public Pow () {
-                        Solution = 0;
-                }
-                public Pow (float pow, float num) {
-                        float onum=num;
-		        if (pow < 0){
-		        	while( -1 > pow ){
-		        		num = num / onum;
-	        			pow = pow + 1;
-		        	}
-		        }else{
-	        		while( 1 < pow ){
-				        num = num * onum;
-			        	pow = pow - 1;
-	        		}
-	        	}
-	        	Solution = ((float)num);
-                }
-                public Pow (long pow, long num) {
-                        long onum=num;
-		        if (pow < 0){
-		        	while( -1 > pow ){
-		        		num = num / onum;
-	        			pow = pow + 1;
-		        	}
-		        }else{
-	        		while( 1 < pow ){
-				        num = num * onum;
-			        	pow = pow - 1;
-	        		}
-	        	}
-	        	Solution = ((float)num);
-                }
-                public Pow (long pow, int num) {
-                        int onum=num;
-		        if (pow < 0){
-		        	while( -1 > pow ){
-		        		num = num / onum;
-	        			pow = pow + 1;
-		        	}
-		        }else{
-	        		while( 1 < pow ){
-				        num = num * onum;
-			        	pow = pow - 1;
-	        		}
-	        	}
-	        	Solution = ((float)num);
-                }
-	}
-
 	public static void main(String[] args) {
 		if(null == args || 2 > args.length){
-			ProgramError = "Usage: Up [Core Number] [Number of Uppings]";
+			ProgramError = "Usage: Up [Action] [Values]";
 			System.out.println(ProgramError);
 			ProgramError = "Not enough initial input arguments";
 			System.out.println(ProgramError);
 			return;
 		}
-		float Core = Long.valueOf(args[0]).longValue();
-		int Uppings = Integer.parseInt(args[1]);
-		byte firstTest = (byte)Integer.parseInt(args[2]);
-		branch NewTest = new branch(new byte[]{(byte)2, (byte)2, (byte)2, (byte)2, (byte)2, (byte)2, (byte)2, firstTest});
+		//float Core = Long.valueOf(args[0]).longValue();
+		//int Uppings = Integer.parseInt(args[1]);
+		int InLnth = args.length;
+		byte[] ByteArray = new byte[InLnth];
+		Object J = ByteArray[0];
 		
-		System.out.println(branch.GetVal());
-		System.out.println(branch.GetTenPower()[0] + ", " + branch.GetTenPower()[1]);/**
-		if (10 > Uppings){
-			System.out.println(Upping(Core, Uppings));
-		}else{
-			ProgramError = "Your 'Up' value is too long, solution larger than 10^19.";
-			System.out.println(ProgramError);
-		}**/
-			
-	}//End main
-
-	public static float Upping(float Core, int Upping) {
-		float out = 0;
-		power calc = new power();
-		Upping = Upping - 1;
-		if (1 < Upping) {
-			out = calc.power(Core, Upping(Core, Upping));
-		}else{
-			out = calc.power(Core, Core);
+		Object K = InLnth;
+		
+		for (int c = 7; (0 - 1) < c; c--){
+			ByteArray[c] = (byte)Integer.parseInt(args[c]);
 		}
-		return out;
-	}//End funct
+		long val = (long)Integer.parseInt(args[8]);
+		branch Test = new branch(val);
+		//branch NewTest = new branch(ByteArray);
+
+		System.out.println(Test.Display());
+		System.out.println(Test.DisplayRawBytes());
+		//System.out.println(NewTest.Display());
+		//System.out.println(NewTest.DisplayRawBytes());
+
+	}//End main
 
 }//End class
